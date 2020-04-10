@@ -1,8 +1,8 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const htmlTemplate = require('html-webpack-template')
+const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = (env, argv) => {
@@ -35,11 +35,13 @@ module.exports = (env, argv) => {
       ],
     },
     optimization: {
+      minimize: true,
       splitChunks: {
         chunks: 'all',
       },
       minimizer: [
         // Make CSS smaller
+        new TerserPlugin(),
         new OptimizeCssAssetsPlugin(),
       ],
     },
@@ -58,7 +60,6 @@ module.exports = (env, argv) => {
         filename: '[name].css',
         chunkFilename: '[name]-[id].css',
       }),
-      new UglifyJsPlugin()
     ],
   }
 }
